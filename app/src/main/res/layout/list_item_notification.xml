@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<layout xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable name="viewmodel" type="com.example.chat_app.ui.notifications.NotificationsViewModel" />
+
+        <variable name="userinfo" type="com.example.chat_app.data.db.entity.UserInfo" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp">
+        
+        <androidx.cardview.widget.CardView
+            android:id="@+id/chatCardView"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:cardCornerRadius="29dp"
+            app:cardPreventCornerOverlap="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+        >
+            <ImageView
+                android:id="@+id/userProfileImage"
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:layout_margin="0dp"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/avatars[2]"
+                app:bind_image_url="@{userinfo.profileImageUrl}"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/BoldText"
+            android:id="@+id/displayNameText"
+            android:layout_marginStart="16dp"
+            android:singleLine="true"
+
+            android:textSize="18sp"
+            app:layout_constraintLeft_toRightOf="@id/chatCardView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="tran duc viet"
+            android:text="@{userinfo.displayName}"
+            />
+         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/BoldText"
+            android:id="@+id/requestText"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="7dp"
+            android:text="@string/new_friend_request"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/chatCardView"
+            app:layout_constraintLeft_toRightOf="@id/chatCardView"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/acceptButton"
+            android:background="@color/white"
+            android:onClick="@{() -> viewmodel.acceptNotificationPressed(userinfo)}"
+            android:text="@string/accept"
+            app:layout_constraintLeft_toLeftOf="@id/requestText"
+            app:layout_constraintTop_toBottomOf="@id/requestText"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="24dp"
+            android:backgroundTint="@color/textError"
+            android:text="@string/decline"
+            android:onClick="@{() -> viewmodel.declineNotificationPressed(userinfo)}"
+            app:layout_constraintLeft_toRightOf="@id/acceptButton"
+            app:layout_constraintTop_toBottomOf="@id/requestText"/>
+
+            
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</layout>

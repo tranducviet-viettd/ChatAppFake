@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.example.chat_app.ui.key.KeyViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/keyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/key"
+            android:textSize="30sp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/BoldText"
+            app:layout_constraintBottom_toTopOf="@id/keyEditText"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/keyEditText"
+            app:layout_constraintTop_toBottomOf="@id/keyText"
+            app:layout_constraintBottom_toTopOf="@id/keySendBtn"
+            android:hint="@string/key"
+            android:layout_marginTop="20dp"
+            >
+
+         <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             android:inputType="text"
+            android:text="@={viewmodel.keyEditText}"
+            />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/keySendBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/keyEditText"
+            android:layout_marginTop="30dp"
+            android:text="@string/send"
+            android:onClick="@{() -> viewmodel.sendBtnPressed()}"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
