@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <import type="android.view.View"/>
+        <variable name="viewmodel" type="com.example.chat_app.ui.chat.ChatViewModel" />
+
+        <variable
+            name="message"
+            type="com.example.chat_app.data.db.entity.Message" />
+        
+        
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/timeText"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            tools:text="11:40"
+            app:bind_epochTimeMsToDate="@{message.epochTimeMs}"
+            app:bind_message="@{message}"
+            app:bind_message_viewmodel="@{viewmodel}"
+            />
+
+
+
+        <TextView
+            android:id="@+id/messageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="240dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/border_corner"
+            android:paddingLeft="12dp"
+            android:paddingTop="6dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="6dp"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            tools:text="B22DCCN901 - Traanf Đức Việt"
+            android:text="@{message.text}"
+            android:visibility="@{message.text.length() != 0 ? View.VISIBLE : View.GONE}"
+            android:onLongClick="@{() -> viewmodel.onReceivedBottomToolbar(message)}"
+            />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:backgroundTint="@color/white"
+            app:cardCornerRadius="20dp"
+            android:layout_marginStart="12dp"
+            >
+        <ImageView
+            android:id="@+id/messageImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="240dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:visibility="@{message.imageUrl.length() != 0 ? View.VISIBLE : View.GONE}"
+            android:onClick="@{() -> viewmodel.imageMessagePressed(message)}"
+            app:picassoImageUrl="@{message.imageUrl}"
+            tools:src="@tools:sample/avatars"
+            android:onLongClick="@{() -> viewmodel.onReceivedBottomToolbar(message)}"/>
+        </androidx.cardview.widget.CardView>
+
+
+
+    </LinearLayout>
+
+</layout>

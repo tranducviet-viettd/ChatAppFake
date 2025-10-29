@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <import type="com.example.chat_app.ui.chats.ChatsViewModel"/>
+        
+        <variable name="viewmodel" type="com.example.chat_app.ui.profile.ProfileViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".6"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="170dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/blurredUserImage"
+
+            tools:src="@tools:sample/avatars[0]"
+            app:bind_image_url_blur="@{viewmodel.otherUser.info.profileImageUrl}"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/white"
+            android:id="@+id/userImageCardView"
+            app:layout_constraintBottom_toBottomOf="@id/blurredUserImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/blurredUserImage"
+            tools:src="@tools:sample/avatars[0]"
+            app:bind_image_url="@{viewmodel.otherUser.info.profileImageUrl}"
+            />
+
+
+
+
+
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameText"
+            style="@style/BoldText"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/userImageCardView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            tools:text="nameText"
+            android:textSize="36sp"
+            android:text="@{viewmodel.otherUser.info.displayName}"
+
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:maxLength="40"
+            style="@style/MessageSeen"
+            android:singleLine="true"
+            android:text="@{viewmodel.otherUser.info.status}"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nameText"
+            tools:text="Status"
+            android:gravity="center"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="42dp"
+            android:layout_marginEnd="42dp"
+            android:layout_marginStart="42dp"
+            app:layout_constraintTop_toBottomOf="@id/guideline60"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                app:cardElevation="6dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <Button
+                    android:id="@+id/addFriendButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:textSize="16sp"
+                    tools:text="Add Friend"
+                    android:text="@string/add_friend"
+                    android:background="@drawable/border"
+                    tools:visibility="visible"
+                    android:elevation="10dp"
+                    android:onClick="@{() -> viewmodel.addFriendPressed()}"
+                    android:visibility="@{viewmodel.layoutState == viewmodel.layoutState.NOT_FRIEND? View.VISIBLE : View.GONE}"
+                    />
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <Button
+                android:id="@+id/removeFriendButton"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="@string/remove_friend"
+                android:textSize="16sp"
+                tools:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> viewmodel.removeFriendPressed()}"
+                android:visibility="@{viewmodel.layoutState == viewmodel.layoutState.IS_FRIEND? View.VISIBLE : View.GONE}"
+
+                />
+
+            <Button
+                android:id="@+id/requestSentButton"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="@string/request_sent"
+                android:textSize="16sp"
+                android:enabled="true"
+                android:backgroundTint="@color/gray"
+                tools:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="@{viewmodel.layoutState == viewmodel.layoutState.REQUEST_SENT? View.VISIBLE : View.GONE}"
+                />
+
+
+            <Button
+                android:id="@+id/acceptRequestButton"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="@string/accept_friend_request"
+                android:textSize="16sp"
+                android:backgroundTint="@color/teal_200"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible"
+                android:onClick="@{() -> viewmodel.acceptFriendRequestPressed()}"
+                android:visibility="@{viewmodel.layoutState == viewmodel.layoutState.ACCEPT_DECLINE? View.VISIBLE : View.GONE}"
+                />
+
+
+            <Button
+                android:id="@+id/declineRequestButton"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/acceptRequestButton"
+                android:text="@string/decline_friend_request"
+                android:textSize="16sp"
+                android:backgroundTint="@color/textError"
+                tools:visibility="visible"
+                android:onClick="@{() -> viewmodel.declineFriendRequestPressed()}"
+                android:visibility="@{viewmodel.layoutState == viewmodel.layoutState.ACCEPT_DECLINE? View.VISIBLE : View.GONE}"
+
+                />
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+            
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        
+        <variable name="viewmodel" type="com.example.chat_app.ui.chat.ChatViewModel" />
+        
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize">
+        
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userProfileImage"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            tools:src="@tools:sample/avatars"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:bind_image_url="@{viewmodel.otherUser.profileImageUrl}"
+            />
+
+        <View
+            android:id="@+id/onlineView"
+            android:layout_width="11dp"
+            android:layout_height="11dp"
+            android:layout_marginStart="35dp"
+            android:background="@drawable/round_circle_online_green"
+            app:layout_constraintEnd_toEndOf="@id/userProfileImage"
+            app:layout_constraintBottom_toBottomOf="@id/userProfileImage"
+            android:visibility="@{viewmodel.otherUser.online == true ? View.VISIBLE : View.GONE}"
+
+            />
+
+        <TextView
+            android:id="@+id/otherUserNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Viet"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toEndOf="@id/userProfileImage"
+            app:layout_constraintTop_toTopOf="@id/userProfileImage"
+            android:textSize="18sp"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:text="@{viewmodel.otherUser.displayName}"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Onine"
+            android:alpha=".7"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toEndOf="@id/userProfileImage"
+            app:layout_constraintTop_toBottomOf="@id/otherUserNameText"
+            app:layout_constraintBottom_toBottomOf="@id/userProfileImage"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:text="@{viewmodel.otherUser.online == true? `Online` : `Offline`}"/>
+
+
+        
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+</layout>
