@@ -36,6 +36,17 @@ class ShowImageViewModel(private val imageUrl: String): DefaultViewModel() {
     private val _downBtnEvent = MutableLiveData<Event<String>>()
     val downBtnEvent: LiveData<Event<String>> = _downBtnEvent
 
+    private val _rotateBtnEvent = MutableLiveData<Float>()
+    val rotateBtnEvent: LiveData<Float> = _rotateBtnEvent
+
+
+    init {
+        _rotateBtnEvent.value= 0f
+    }
+
+    fun rotateBtnPressed(){
+        _rotateBtnEvent.value=if((_rotateBtnEvent.value!! + 90f) == 360f) 360f else (_rotateBtnEvent.value!! + 90f) % 360f
+    }
     fun downBtnPressed(){
         _downBtnEvent.value= Event(_imageUrl)
     }

@@ -86,4 +86,7 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
     implementation("com.cloudinary:cloudinary-android:3.0.2")
+
+    implementation("com.github.MikeOrtiz:TouchImageView:1.4.1")
+
 }
