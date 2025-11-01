@@ -79,7 +79,12 @@ class MainActivity : AppCompatActivity() {
                     navView.visibility = View.GONE
                 }
                 R.id.showImageFragment -> {
-                    supportActionBar?.hide()
+                    supportActionBar?.show()
+                    mainToolbar.visibility = View.VISIBLE
+                    navView.visibility = View.GONE
+                }
+                R.id.previewImageFragment -> {
+                    supportActionBar?.show()
                     mainToolbar.visibility = View.VISIBLE
                     navView.visibility = View.GONE
                 }

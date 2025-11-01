@@ -25,6 +25,7 @@ import com.example.chat_app.util.updateItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChatViewModelFactory(private val userID: String, private val otherID : String,private val chatID:String,private val context: Context):
     ViewModelProvider.Factory{
@@ -65,6 +66,9 @@ class ChatViewModel(private val userID: String,
 
     private val _shouldScrollToBottom = MutableLiveData<Boolean>()
     val shouldScrollToBottom: LiveData<Boolean> = _shouldScrollToBottom
+
+    private val _isSendingImage = MutableLiveData<Boolean>(false)
+    val isSendingImage: LiveData<Boolean> = _isSendingImage  // Observe trong Fragment
 
     // Gọi khi có tin nhắn mới
     fun triggerScrollToBottom() {
@@ -188,23 +192,28 @@ class ChatViewModel(private val userID: String,
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 // Chuyển đổi Uri thành ByteArray
-                val byteArray = convertFileToByteArray(context,uri)
+                val byteArray = convertFileToByteArray(context, uri)
                 storageRepository.uploadUserImage(userID, byteArray) { result ->
                     when (result) {
                         is Result.Success -> {
-                            val newMessage = Message(senderID = userID, imageUrl = result.data.toString())
+                            val newMessage =
+                                Message(senderID = userID, imageUrl = result.data.toString())
                             dbRepository.updateLastMessage(chatID, newMessage)
-                            dbRepository.updateNewMessage(chatID,userID,otherID, newMessage)
+                            dbRepository.updateNewMessage(chatID, userID, otherID, newMessage)
                         }
+
                         is Result.Error -> {
 
                         }
+
                         is Result.Loading -> {
                             // Có thể cập nhật UI để hiển thị trạng thái loading
                         }
                     }
                 }
             } catch (e: Exception) {
+
+            } finally {
 
             }
         }

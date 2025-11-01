@@ -1,8 +1,11 @@
 package com.example.chat_app.ui.chat
 
+import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -20,13 +23,21 @@ import com.example.chat_app.databinding.ToolbarAddonChatBinding
 import com.example.chat_app.ui.chats.ChatsViewModel
 import androidx.activity.result.contract.ActivityResultContracts
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
+import com.example.chat_app.App
 import com.example.chat_app.data.EventObserver
 import com.example.chat_app.data.db.entity.Message
 import com.example.chat_app.databinding.BottomCustomMessageSentBinding
+import com.example.chat_app.ui.preview_image.PreviewImageFragment
 import com.example.chat_app.ui.show_image.ShowImageFragment
+import com.example.chat_app.util.convertTwoUserIDs
+import java.io.File
+import java.io.FileOutputStream
 
 
 class ChatFragment: Fragment() {
@@ -125,6 +136,7 @@ class ChatFragment: Fragment() {
         setupImagePicker()
     }
 
+
     private fun setupObserver(){
         viewModel.imagePressEvent.observe(viewLifecycleOwner, EventObserver{
             navigateToShowImage(it)
@@ -150,6 +162,9 @@ class ChatFragment: Fragment() {
     private fun setupImagePicker() {
         viewDataBinding.selectImageBtn.setOnClickListener {
             imagePickerLauncher.launch("image/*")
+        }
+        viewDataBinding.cameraBtn.setOnClickListener {
+            checkAndRequestCameraPermission()
         }
     }
 
@@ -193,6 +208,70 @@ class ChatFragment: Fragment() {
         supportActionBar.setDisplayShowTitleEnabled(true)
         supportActionBar.customView = null
     }
+
+    private val cameraPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            openCameraWithPreview()
+        } else {
+            Toast.makeText(requireContext(), "Cần quyền camera để chụp ảnh", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun checkAndRequestCameraPermission() {
+
+        when {
+            // Android 6.0 trở lên: luôn cần quyền CAMERA
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+                if (ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.CAMERA
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    openCameraWithPreview()
+                } else {
+                    cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                }
+            }
+
+            // Dưới Android 6: quyền được cấp tự động khi cài đặt
+            else -> {
+                openCameraWithPreview()
+            }
+        }
+    }
+    private val cameraPreviewLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        bitmap?.let {
+            val uri = saveBitmapToTempFile(it)
+            navigateToPreviewImage(uri)
+        } ?: run {
+            Toast.makeText(requireContext(), "Chụp ảnh thất bại", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun saveBitmapToTempFile(bitmap: Bitmap): Uri {
+        val file = File(requireContext().cacheDir, "preview_${System.currentTimeMillis()}.jpg")
+        FileOutputStream(file).use { out ->
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)
+        }
+        return FileProvider.getUriForFile(
+            requireContext(),
+            "com.example.chat_app.fileprovider",
+            file
+        )
+    }
+    private fun navigateToPreviewImage(uri: Uri){
+        val bundle= bundleOf(
+            PreviewImageFragment.ARGS_KEY_URI to uri,
+            PreviewImageFragment.ARGS_KEY_USER_ID1 to requireArguments().getString(ARGS_KEY_USER_ID)!!,
+            PreviewImageFragment.ARGS_KEY_CHAT_ID1 to requireArguments().getString(ARGS_KEY_CHAT_ID)!!,
+            PreviewImageFragment.ARGS_KEY_OTHER_USER_ID1 to requireArguments().getString(ARGS_KEY_OTHER_USER_ID)!!
+        )
+        findNavController().navigate(R.id.action_chatFragment_to_previewImageFragmet,bundle)
+    }
+    private fun openCameraWithPreview() {
+        cameraPreviewLauncher.launch(null)  // Mở camera
+    }
+
 
 
 }

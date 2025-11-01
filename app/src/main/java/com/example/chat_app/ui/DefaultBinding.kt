@@ -1,6 +1,7 @@
 package com.example.chat_app.ui
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -26,6 +27,14 @@ fun bindImageUrl(imageView: ImageView,url: String?){
         null -> Unit
         "" -> imageView.setBackgroundResource(R.drawable.ic_baseline_person_24)
         else -> Picasso.get().load(url).error(R.drawable.ic_baseline_person_24).into(imageView)
+    }
+}
+
+@BindingAdapter("bind_image_uri")
+fun bindImageUri(imageView: ImageView,uri: Uri?){
+    when(uri){
+        null -> Unit
+        else -> Picasso.get().load(uri).error(R.drawable.ic_baseline_person_24).into(imageView)
     }
 }
 

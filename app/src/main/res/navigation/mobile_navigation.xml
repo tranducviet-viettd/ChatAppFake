@@ -59,6 +59,19 @@
         <action
             android:id="@+id/action_chatFragment_to_showImageFragmet"
             app:destination="@id/showImageFragment"/>
+        <action
+            android:id="@+id/action_chatFragment_to_previewImageFragmet"
+            app:destination="@id/previewImageFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/previewImageFragment"
+        android:name="com.example.chat_app.ui.preview_image.PreviewImageFragment"
+        android:label="Image">
+        <action
+            android:id="@+id/action_previewImageFragment_to_chatFragment"
+            app:destination="@id/chatFragment"/>
+
     </fragment>
 
     <fragment
