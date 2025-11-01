@@ -189,6 +189,7 @@ class ChatViewModel(private val userID: String,
     }
 
     fun sendImage(uri: Uri) {
+        onResult(null, Result.Loading)
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 // Chuyển đổi Uri thành ByteArray
@@ -200,6 +201,8 @@ class ChatViewModel(private val userID: String,
                                 Message(senderID = userID, imageUrl = result.data.toString())
                             dbRepository.updateLastMessage(chatID, newMessage)
                             dbRepository.updateNewMessage(chatID, userID, otherID, newMessage)
+                            onResult(null, Result.Success(null))
+
                         }
 
                         is Result.Error -> {

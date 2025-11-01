@@ -117,7 +117,7 @@ fun bindPicassoImageUrl(imageView: ImageView, url: String?) {
         }
 
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-            imageView.setImageResource(R.drawable.ic_baseline_error_24)
+            imageView.setImageResource(R.drawable.picture_svgrepo_com__1_)
         }
     }
 
@@ -133,7 +133,7 @@ private fun loadFromLocalFile(
 ) {
     Picasso.get()
         .load(localFile)
-        .placeholder(R.drawable.ic_baseline_error_24)
+        .placeholder(R.drawable.picture_svgrepo_com__1_)
         .error(R.drawable.ic_baseline_error_24)
         .into(imageView, object : Callback {
             override fun onSuccess() {
@@ -179,7 +179,7 @@ private fun loadThumbnail(
 ) {
     Picasso.get()
         .load(thumbFile)
-        .placeholder(R.drawable.ic_baseline_error_24)
+        .placeholder(R.drawable.picture_svgrepo_com__1_)
         .error(R.drawable.ic_baseline_error_24)
         .into(imageView, object : Callback {
             override fun onSuccess() {

@@ -33,6 +33,7 @@ import com.example.chat_app.App
 import com.example.chat_app.data.EventObserver
 import com.example.chat_app.data.db.entity.Message
 import com.example.chat_app.databinding.BottomCustomMessageSentBinding
+import com.example.chat_app.ui.main.MainActivity
 import com.example.chat_app.ui.preview_image.PreviewImageFragment
 import com.example.chat_app.ui.show_image.ShowImageFragment
 import com.example.chat_app.util.convertTwoUserIDs
@@ -151,6 +152,23 @@ class ChatFragment: Fragment() {
             // Hiển thị thông báo
             Toast.makeText(requireContext(), "Đã copy", Toast.LENGTH_SHORT).show()
         })
+        viewModel.dataLoading.observe(viewLifecycleOwner,
+            EventObserver {
+                (activity as MainActivity).showGlobalProgressBar(it)
+                if(it){
+                    viewDataBinding.cameraBtn.isClickable=false
+                    viewDataBinding.selectImageBtn.isClickable=false
+                    viewDataBinding.messageEditText.isClickable=false
+                    viewDataBinding.sendBtn.isClickable=false
+                }
+                else{
+                    viewDataBinding.cameraBtn.isClickable=true
+                    viewDataBinding.selectImageBtn.isClickable=true
+                    viewDataBinding.messageEditText.isClickable=true
+                    viewDataBinding.sendBtn.isClickable=true
+                }
+            })
+
     }
 
     private fun navigateToShowImage(message: Message){

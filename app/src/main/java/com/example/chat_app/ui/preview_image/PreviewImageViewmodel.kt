@@ -31,6 +31,7 @@ class PreviewImageViewModel(private val uri: Uri,private val userID: String, pri
     private val storageRepository= StorageRepository()
     private val dbRepository = DatabaseRepository()
     fun sendImage() {
+        onResult(null, Result.Loading)
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 // Chuyển đổi Uri thành ByteArray
@@ -42,6 +43,7 @@ class PreviewImageViewModel(private val uri: Uri,private val userID: String, pri
                                 Message(senderID = userID, imageUrl = result.data.toString())
                             dbRepository.updateLastMessage(chatID, newMessage)
                             dbRepository.updateNewMessage(chatID, userID, otherID, newMessage)
+                            onResult(null, Result.Success(null))
                         }
 
                         is Result.Error -> {

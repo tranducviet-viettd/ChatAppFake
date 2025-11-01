@@ -18,6 +18,7 @@ import com.example.chat_app.R
 import com.example.chat_app.data.EventObserver
 import com.example.chat_app.ui.chat.ChatFragment
 import com.example.chat_app.ui.chat.ChatViewModelFactory
+import com.example.chat_app.ui.main.MainActivity
 
 class PreviewImageFragment: Fragment() {
 
@@ -55,9 +56,19 @@ class PreviewImageFragment: Fragment() {
         setupBtn()
     }
     private fun setupBtn(){
+        viewModel.dataLoading.observe(viewLifecycleOwner,
+            EventObserver {
+                (activity as MainActivity).showGlobalProgressBar(it)
+                if(!it){
+                    findNavController().popBackStack()
+                }
+
+
+            })
+
         viewDataBinding.sendPreviewBtn.setOnClickListener {
             viewModel.sendImage()
-            findNavController().popBackStack()
+
         }
         viewDataBinding.cancelPreviewBtn.setOnClickListener {
             findNavController().popBackStack()
