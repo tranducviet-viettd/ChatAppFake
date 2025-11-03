@@ -96,7 +96,7 @@ class ShowImageFragment : Fragment() {
         val supportActionBar = (activity as AppCompatActivity?)!!.supportActionBar
         supportActionBar?.apply {
             setDisplayShowCustomEnabled(true)
-            setDisplayShowTitleEnabled(false)
+            setDisplayShowTitleEnabled(true)
             setDisplayHomeAsUpEnabled(true) // Nếu cần nút back
             // Đặt custom view
             customView = toolbarCustomShowImageBinding.root

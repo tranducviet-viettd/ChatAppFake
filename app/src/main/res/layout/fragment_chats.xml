@@ -28,6 +28,8 @@
                 tools:listitem="@layout/list_item_chat"
                 app:bind_chats_list="@{viewmodel.chatsList}"/>
 
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -33,6 +33,8 @@ class ChatsViewModel(val myUserID: String) : DefaultViewModel() {
     private val firebaseReferenceChildObserver = FirebaseReferenceChildObserver()
     private val tempChatList = mutableListOf<ChatWithUserInfo>() // Danh sách tạm để tích lũy
 
+    private val selectedChatList = mutableListOf<ChatWithUserInfo>()
+    val onCheckBox = MutableLiveData<Boolean>()
     var selectChat: LiveData<Event<ChatWithUserInfo>> = _selectChat
     val chatsList = MutableLiveData<MutableList<ChatWithUserInfo>>().apply {
         value = mutableListOf() // Khởi tạo danh sách rỗng
@@ -58,6 +60,7 @@ class ChatsViewModel(val myUserID: String) : DefaultViewModel() {
             }
         }
         setupChats()
+        onCheckBox.value=false
     }
 
     private fun setupChats() {
@@ -126,5 +129,35 @@ class ChatsViewModel(val myUserID: String) : DefaultViewModel() {
         Log.d("AddChats", "ChatsViewModel cleared")
         Log.d("CheckLifecycle", "ChatsViewModel: ChatsViewModel onCleared called")
 
+    }
+
+    fun turnOnClickBox(): Boolean{
+        onCheckBox.value=true
+        return true
+    }
+    fun turnOffClickBox() {
+        onCheckBox.value=false
+    }
+
+    fun isItemSelected(chatWithUserInfo: ChatWithUserInfo):Boolean{
+        return false
+    }
+
+    fun onItemCheckedChanged(chatWithUserInfo: ChatWithUserInfo,isSelected: Boolean){
+        if(isSelected){
+            selectedChatList.add(chatWithUserInfo)
+        }
+        else{
+            selectedChatList.remove(chatWithUserInfo)
+        }
+
+    }
+    fun deleteChats(){
+        if(selectedChatList.isNotEmpty()) {
+            selectedChatList.forEach {
+                dbRepository.removeChat(it.mChat.info.id)
+                dbRepository.removeMessage(it.mChat.info.id)
+            }
+        }
     }
 }
