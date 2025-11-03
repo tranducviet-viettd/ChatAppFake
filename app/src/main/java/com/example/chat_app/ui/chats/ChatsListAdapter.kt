@@ -2,6 +2,7 @@ package com.example.chat_app.ui.chats
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -9,12 +10,13 @@ import com.example.chat_app.data.model.ChatWithUserInfo
 import com.example.chat_app.databinding.ListItemChatBinding
 import com.example.chat_app.data.db.entity.Chat
 
-class ChatsListAdapter internal constructor(private val viewModel: ChatsViewModel) : ListAdapter<(ChatWithUserInfo),ChatsListAdapter.ViewHolder>(ChatDiffCallback()){
+class ChatsListAdapter internal constructor(private val viewModel: ChatsViewModel,private val lifecycleOwner: LifecycleOwner) : ListAdapter<(ChatWithUserInfo),ChatsListAdapter.ViewHolder>(ChatDiffCallback()){
 
     class ViewHolder(private val binding : ListItemChatBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(viewModel: ChatsViewModel , item : ChatWithUserInfo){
+        fun bind(viewModel: ChatsViewModel , item : ChatWithUserInfo,lifecycleOwner: LifecycleOwner){
             binding.viewmodel=viewModel
             binding.chatwithuserinfo=item
+            binding.lifecycleOwner = lifecycleOwner
             binding.executePendingBindings()
         }
     }
@@ -26,7 +28,7 @@ class ChatsListAdapter internal constructor(private val viewModel: ChatsViewMode
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        return holder.bind(viewModel,getItem(position))
+        return holder.bind(viewModel,getItem(position),lifecycleOwner)
     }
 
 }
