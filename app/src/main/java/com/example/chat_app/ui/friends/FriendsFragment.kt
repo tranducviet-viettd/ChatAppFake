@@ -1,35 +1,27 @@
-package com.example.chat_app.ui.users
+package com.example.chat_app.ui.friends
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.node.ViewAdapter
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.example.chat_app.App
-import com.example.chat_app.data.EventObserver
-import com.example.chat_app.databinding.FragmentUsersBinding
 import com.example.chat_app.R
+import com.example.chat_app.data.EventObserver
+import com.example.chat_app.databinding.FragmentFriendsBinding
 import com.example.chat_app.ui.profile.ProfileFragment
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-class UsersFragment: Fragment() {
+import kotlin.getValue
 
-    private val viewModel : UsersViewModel by viewModels { UsersViewModelFactory(App.myUserID) }
-    private lateinit var viewDataBinding : FragmentUsersBinding
-    private lateinit var viewAdapter: UsersListAdapter
-    private var searchJob: Job? = null
+class FriendsFragment: Fragment() {
+
+    private val viewModel : FriendsViewModel by viewModels { FriendsViewModelFactory(App.myUserID) }
+    private lateinit var viewDataBinding : FragmentFriendsBinding
+    private lateinit var viewAdapter: FriendsListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +30,7 @@ class UsersFragment: Fragment() {
     ): View? {
         Log.d("CheckLifecycle", "UserFragment: onCreateView called - Fragment creating View")
 
-        viewDataBinding= FragmentUsersBinding.inflate(inflater,container,false).apply { viewmodel = viewModel }
+        viewDataBinding= FragmentFriendsBinding.inflate(inflater,container,false).apply { viewmodel = viewModel }
         viewDataBinding.lifecycleOwner=this.viewLifecycleOwner
         return viewDataBinding.root
     }
@@ -47,54 +39,24 @@ class UsersFragment: Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupListAdapter()
         setupObserver()
-
     }
 
     private fun setupListAdapter(){
         val viewModel= viewDataBinding.viewmodel
-        if(viewModel!=null) {  viewAdapter= UsersListAdapter(viewModel)
-            viewDataBinding.usersRecyclerView.adapter=viewAdapter }
+        if(viewModel!=null) {  viewAdapter= FriendsListAdapter(viewModel)
+            viewDataBinding.friendsRecycleView.adapter=viewAdapter }
 
     }
+
     private fun setupObserver(){
         viewModel.selectUser.observe(viewLifecycleOwner, EventObserver{
             nagivateToProfile(it.info.id)
         })
-
-        viewDataBinding.searchText.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(
-                p0: CharSequence?, p1: Int,p2: Int, p3: Int
-            ) {
-
-            }
-
-            override fun onTextChanged(
-                p0: CharSequence?, p1: Int, p2: Int, p3: Int
-            ) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                searchJob?.cancel()
-                searchJob = lifecycleScope.launch {
-                    delay(400) // Đợi 400ms sau khi ngừng gõ
-                    s?.toString()?.let { query ->
-                        if (query.isNotBlank()) {
-                            viewModel.searchUser(query)
-                        } else {
-                            viewModel.clearUser()
-                        }
-                    }
-                }
-            }
-
-
-        })
-
     }
+
     private fun nagivateToProfile(userID:String){
         val bundle= bundleOf(ProfileFragment.ARGS_KEY_USER_ID to userID)
-        findNavController().navigate(R.id.action_navigation_users_to_profileFragment,bundle)
+        findNavController().navigate(R.id.action_navigation_friends_to_profileFragment,bundle)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -142,3 +104,4 @@ class UsersFragment: Fragment() {
 
 
 }
+

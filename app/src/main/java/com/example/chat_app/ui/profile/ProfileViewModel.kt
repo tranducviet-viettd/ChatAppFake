@@ -6,15 +6,18 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.chat_app.data.Event
 import com.example.chat_app.data.Result
 import com.example.chat_app.data.db.entity.Chat
 import com.example.chat_app.data.db.entity.Message
 import com.example.chat_app.data.db.entity.User
 import com.example.chat_app.data.db.entity.UserFriend
+import com.example.chat_app.data.db.entity.UserInfo
 import com.example.chat_app.data.db.entity.UserNotification
 import com.example.chat_app.data.db.entity.UserRequest
 import com.example.chat_app.data.db.remote.FirebaseReferenceValueObserver
 import com.example.chat_app.data.db.repository.DatabaseRepository
+import com.example.chat_app.data.model.ChatWithUserInfo
 import com.example.chat_app.ui.DefaultViewModel
 import com.example.chat_app.util.convertTwoUserIDs
 
@@ -38,6 +41,10 @@ class ProfileViewModel(private val myUserID: String,private val userID: String):
 
     val otherUser: LiveData<User> = _otherUser
     val layoutState = MediatorLiveData<LayoutState>()
+
+    private val _selectChat = MutableLiveData<Event<UserInfo>>()
+    var selectChat: LiveData<Event<UserInfo>> = _selectChat
+
 
     init{
         Log.d("CheckLifecycle", "ProfileViewModel: ProfileViewModel created")
@@ -78,6 +85,11 @@ class ProfileViewModel(private val myUserID: String,private val userID: String):
         dbRepository.removeFriend(myUserID,_otherUser.value!!.info.id)
         dbRepository.removeChat(convertTwoUserIDs(myUserID,_otherUser.value!!.info.id))
         dbRepository.removeMessage(convertTwoUserIDs(myUserID,_otherUser.value!!.info.id))
+    }
+
+    fun chatPressed(){
+            _selectChat.value = Event(UserInfo(id = userID))
+
     }
 
     fun acceptFriendRequestPressed(){

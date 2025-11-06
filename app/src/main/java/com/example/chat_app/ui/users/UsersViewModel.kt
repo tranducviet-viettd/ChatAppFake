@@ -35,19 +35,26 @@ class UsersViewModel(private val myUsersID:String): DefaultViewModel() {
         usersList.addSource(updateUsersList){ newUser ->
             usersList.value= updateUsersList.value?.filter { it.info.id != myUsersID }
         }
-        loadUsers()
     }
 
     override fun onCleared() {
         super.onCleared()
         Log.d("CheckLifecycle", "UserViewModel: UserViewModel onCleared called")
     }
-    private fun loadUsers(){
+
+    fun searchUser(query : String){
         dbRepository.loadUsers { result: Result<MutableList<User>> ->
-            onResult(updateUsersList,result)
+            if(result is Result.Success){
+                updateUsersList.value = result.data?.asSequence()?.filter { user ->
+                    user.info.displayName.contains(query,ignoreCase = true)
+                }?.toMutableList()
+            }
         }
     }
 
+    fun clearUser(){
+        usersList.value=emptyList()
+    }
     fun selectUser(user: User){
         _selectUser.value=Event(user)
     }

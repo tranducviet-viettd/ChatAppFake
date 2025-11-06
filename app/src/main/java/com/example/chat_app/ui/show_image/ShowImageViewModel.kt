@@ -40,6 +40,9 @@ class ShowImageViewModel(private val imageUrl: String): DefaultViewModel() {
     val rotateBtnEvent: LiveData<Float> = _rotateBtnEvent
 
 
+    private val _backBtnEvent = MutableLiveData<Event<Unit>>()
+    val backBtnEvent: LiveData<Event<Unit>> = _backBtnEvent
+
     init {
         _rotateBtnEvent.value= 0f
     }
@@ -49,5 +52,9 @@ class ShowImageViewModel(private val imageUrl: String): DefaultViewModel() {
     }
     fun downBtnPressed(){
         _downBtnEvent.value= Event(_imageUrl)
+    }
+
+    fun backBtnPressed(){
+
     }
 }

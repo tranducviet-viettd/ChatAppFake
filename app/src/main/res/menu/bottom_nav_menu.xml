@@ -9,8 +9,12 @@
         android:icon="@drawable/ic_baseline_notifications_24"
         android:title="@string/title_notifications" />
     <item
-        android:id="@+id/navigation_users"
+        android:id="@+id/navigation_friends"
         android:icon="@drawable/ic_baseline_people_24"
+        android:title="@string/title_friends" />
+    <item
+        android:id="@+id/navigation_users"
+        android:icon="@drawable/search_alt_1_svgrepo_com"
         android:title="@string/title_users" />
     <item
         android:id="@+id/navigation_settings"

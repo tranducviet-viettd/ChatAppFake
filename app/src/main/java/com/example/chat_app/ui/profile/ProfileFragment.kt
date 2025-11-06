@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,8 +14,12 @@ import androidx.navigation.navGraphViewModels
 import com.example.chat_app.App
 import com.example.chat_app.R
 import com.example.chat_app.data.EventObserver
+import com.example.chat_app.data.db.entity.UserInfo
+import com.example.chat_app.data.model.ChatWithUserInfo
 import com.example.chat_app.databinding.FragmentProfileBinding
+import com.example.chat_app.ui.chat.ChatFragment
 import com.example.chat_app.ui.main.MainActivity
+import com.example.chat_app.util.convertTwoUserIDs
 import com.example.chat_app.util.forceHideKeyboard
 import com.example.chat_app.util.showSnackBar
 
@@ -63,7 +68,19 @@ class ProfileFragment: Fragment() {
                 view?.showSnackBar(text)
                 view?.forceHideKeyboard()
             })
+        viewModel.selectChat.observe(viewLifecycleOwner, EventObserver{
+            navigateToChat(it)
+        })
     }
+    private fun navigateToChat(userInfo: UserInfo){
+        val bundle= bundleOf(
+            ChatFragment.ARGS_KEY_USER_ID to App.myUserID,
+            ChatFragment.ARGS_KEY_CHAT_ID to convertTwoUserIDs(App.myUserID,userInfo.id),
+            ChatFragment.ARGS_KEY_OTHER_USER_ID to userInfo.id
+        )
+        findNavController().navigate(R.id.action_profileFragment_to_chatFragment,bundle)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

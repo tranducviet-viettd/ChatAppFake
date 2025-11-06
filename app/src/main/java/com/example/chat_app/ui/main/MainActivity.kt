@@ -102,6 +102,7 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_chats,
             R.id.navigation_notifications,
             R.id.navigation_users,
+            R.id.navigation_friends,
             R.id.navigation_settings,
             R.id.startFragment,
             R.id.keyFragment

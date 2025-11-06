@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.chat_app.data.Event
 import com.example.chat_app.data.EventObserver
 import com.example.chat_app.databinding.FragmentShowImageBinding
 import com.example.chat_app.databinding.ToolbarCustomShowImageBinding
@@ -96,8 +97,8 @@ class ShowImageFragment : Fragment() {
         val supportActionBar = (activity as AppCompatActivity?)!!.supportActionBar
         supportActionBar?.apply {
             setDisplayShowCustomEnabled(true)
-            setDisplayShowTitleEnabled(true)
-            setDisplayHomeAsUpEnabled(true) // Nếu cần nút back
+            setDisplayShowTitleEnabled(false)
+            setDisplayHomeAsUpEnabled(false) // Nếu cần nút back
             // Đặt custom view
             customView = toolbarCustomShowImageBinding.root
             // Đảm bảo custom view lấp đầy toolbar và căn phải
@@ -122,6 +123,9 @@ class ShowImageFragment : Fragment() {
         viewModel.downBtnEvent.observe(viewLifecycleOwner, EventObserver { imageUrl ->
             Log.d(TAG, "downBtnEvent: Trigger download for URL=$imageUrl")
             checkAndRequestStoragePermission(imageUrl)
+        })
+        viewModel.backBtnEvent.observe(viewLifecycleOwner, EventObserver{
+            findNavController().popBackStack()
         })
     }
 

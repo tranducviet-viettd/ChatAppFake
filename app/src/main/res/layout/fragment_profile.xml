@@ -133,9 +133,23 @@
                 android:layout_height="55dp"
                 android:text="@string/remove_friend"
                 android:textSize="16sp"
-                tools:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintTop_toTopOf="parent"
                 android:onClick="@{() -> viewmodel.removeFriendPressed()}"
+                android:visibility="@{viewmodel.layoutState == viewmodel.layoutState.IS_FRIEND? View.VISIBLE : View.GONE}"
+
+                />
+            <Button
+                android:id="@+id/chatButton"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/acceptRequestButton"
+                android:text="CHAT"
+                android:textSize="16sp"
+                android:backgroundTint="@color/textError"
+                tools:visibility="visible"
+                android:onClick="@{() -> viewmodel.chatPressed()}"
                 android:visibility="@{viewmodel.layoutState == viewmodel.layoutState.IS_FRIEND? View.VISIBLE : View.GONE}"
 
                 />

@@ -24,6 +24,20 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications"/>
 
+
+    <fragment
+        android:id="@+id/navigation_friends"
+        android:name="com.example.chat_app.ui.friends.FriendsFragment"
+        android:label="@string/title_friends"
+        tools:layout="@layout/fragment_friends">
+        <action
+            android:id="@+id/action_navigation_friends_to_profileFragment"
+            app:destination="@id/profileFragment"/>
+
+
+    </fragment>
+
+
     <fragment
         android:id="@+id/navigation_users"
         android:name="com.example.chat_app.ui.users.UsersFragment"
@@ -50,7 +64,12 @@
         android:id="@+id/profileFragment"
         android:name="com.example.chat_app.ui.profile.ProfileFragment"
         tools:layout="@layout/fragment_profile"
-        android:label="@string/title_profile"/>
+        android:label="@string/title_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            />
+    </fragment>
 
     <fragment
         android:id="@+id/chatFragment"
